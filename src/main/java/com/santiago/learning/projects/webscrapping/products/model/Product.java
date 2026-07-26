@@ -21,7 +21,7 @@ import lombok.ToString;
 public class Product {
     @Id
     @Column(name = "product_id")
-    private Long id;
+    private String id;
     @Column(name = "product_name", nullable = false)
     private String name;
     @Column(nullable = false)

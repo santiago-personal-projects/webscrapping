@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PriceRequestDTO {
-    private Long productId;
+    private String productId;
     private String price;
 }

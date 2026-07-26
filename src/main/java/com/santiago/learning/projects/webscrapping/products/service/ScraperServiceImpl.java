@@ -7,6 +7,7 @@ import com.santiago.learning.projects.webscrapping.products.exception.ProductsEx
 import com.santiago.learning.projects.webscrapping.products.model.Price;
 import com.santiago.learning.projects.webscrapping.products.model.Product;
 import com.santiago.learning.projects.webscrapping.products.dto.request.PriceRequestDTO;
+import com.santiago.learning.projects.webscrapping.products.dto.request.ProductAndPriceRequestDTO;
 import com.santiago.learning.projects.webscrapping.products.dto.request.ProductRequestDTO;
 import com.santiago.learning.projects.webscrapping.products.repository.PriceRepository;
 import com.santiago.learning.projects.webscrapping.products.repository.ProductRepository;
@@ -27,7 +28,7 @@ public class ScraperServiceImpl implements ScrapperService {
     @Override
     @Transactional
     public void saveProduct(ProductRequestDTO request) {
-        long id = request.getId();
+        String id = request.getId();
         prodRepo.findById(id)
                 .ifPresentOrElse(
                         product -> {log.warn("Product with id {}, has been previously created", id);},
@@ -40,6 +41,16 @@ public class ScraperServiceImpl implements ScrapperService {
         Product product = prodRepo.findById(entity.getProductId()).orElseThrow(() -> new ProductsException(ErrorCodeEnum.PRODUCT_NOT_FOUND));
         priceRepo.save(new Price(entity.getPrice(), product));
   
+    }
+
+    @Override
+    @Transactional
+    public void saveProductAndPrice(ProductAndPriceRequestDTO request) {
+        String id = request.getId();
+
+        Product product = prodRepo.findById(id)
+            .orElseGet(() -> prodRepo.save(new Product(id, request.getName(), request.getUrl(), null)));
+        priceRepo.save(new Price(request.getPrice(), product));
     }
 
 }

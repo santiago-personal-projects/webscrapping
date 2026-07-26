@@ -15,3 +15,16 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092,localhost:9094}
+      group-id: product-scraped-event-group
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: com.santiago.learning.projects.webscrapping
+webscrapping:
+  kafka:
+    topic: ${WEB_SCRAPPER_KAFKA_TOPIC:product-scraped-event-topic}

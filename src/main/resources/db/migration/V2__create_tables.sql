@@ -1,3 +1,3 @@
-CREATE TABLE webscrapping.product (product_id BIGINT NOT NULL, product_name varchar(255) ,url varchar(255) NULL,CONSTRAINT product_pkey PRIMARY KEY (product_id));
-CREATE TABLE webscrapping.price (price_id uuid NOT NULL, price_date timestamp(6) NOT NULL, price varchar(255) NOT NULL, product_id BIGINT NOT NULL, CONSTRAINT price_pk PRIMARY KEY (price_id));
+CREATE TABLE webscrapping.product (product_id varchar(100) NOT NULL, product_name varchar(255) ,url varchar(255) NULL,CONSTRAINT product_pkey PRIMARY KEY (product_id));
+CREATE TABLE webscrapping.price (price_id uuid NOT NULL, price_date timestamp(6) NOT NULL, price varchar(255) NOT NULL, product_id varchar(100) NOT NULL, CONSTRAINT price_pk PRIMARY KEY (price_id));
 ALTER TABLE webscrapping.price ADD CONSTRAINT price_product_fk FOREIGN KEY (product_id) REFERENCES webscrapping.product(product_id);
