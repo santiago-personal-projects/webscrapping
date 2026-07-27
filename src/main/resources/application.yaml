@@ -1,30 +1,33 @@
 spring:
   application:
-    name: products
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASS}
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-  flyway:
-    enabled: true
-    baseline-on-migrate: true
+    name: webscrapping
   kafka:
-    consumer:
-      auto-offset-reset: earliest
+    producer:
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092,localhost:9094}
-      group-id: product-scraped-event-group
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      acks: all
+      # retries: 10
       properties:
-        spring:
-          json:
-            trusted:
-              packages: com.santiago.learning.projects.webscrapping
+        delivery:
+          timeout:
+            ms: 120000
+        linger:
+          ms: 0
+        request:
+          timeout:
+            ms: 30000
+        enable:
+          idempotence: true
+        max:
+          in:
+            flight:
+              requests:
+                per:
+                  connection: 5
+
 webscrapping:
+  scheduler: ${SCHEDULER_WEB_SCRAPPER:0 0 0 */2 * *}
+  webPage: ${WEB_SCRAPPER_WEB_PAGE:https://www.alkosto.com}
   kafka:
     topic: ${WEB_SCRAPPER_KAFKA_TOPIC:product-scraped-event-topic}
